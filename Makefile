@@ -80,8 +80,12 @@ backup-plugins:
 	@cp -r plugins plugins-bak
 
 bukkit:
-	wget -nv http://ci.bukkit.org/job/dev-CraftBukkit/lastSuccessfulBuild/artifact/target/craftbukkit-0.0.1-SNAPSHOT.jar -O craftbukkit.$(BUILDID).jar
+ifneq ($(shell readlink craftbukkit.jar),craftbukkit.$(BUILDID).jar)
+	@wget -nv http://ci.bukkit.org/job/dev-CraftBukkit/lastSuccessfulBuild/artifact/target/craftbukkit-0.0.1-SNAPSHOT.jar -O craftbukkit.$(BUILDID).jar
 	@ln -s -f  craftbukkit.$(BUILDID).jar craftbukkit.jar
+endif
+
+craftbukkit.jar: bukkit
 
 clean:
 	cd plugins; rm *.bak
